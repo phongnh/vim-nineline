@@ -89,7 +89,7 @@ export def Tabline(): string
     var max_tabs = &columns >= 120 ? (&columns / 35) : 3
 
     # Build tabline using array + join for better performance
-    var parts = [Hi('Title'), 'TABS']
+    var parts = [Hi('Title'), ' TABS']
 
     if tab_count > max_tabs
         add(parts, ' [' .. tab_count .. ']')
@@ -141,7 +141,7 @@ export def Tabline(): string
     endif
 
     add(parts, Hi('TabLineFill') .. '%=')
-    add(parts, Hi('TabLineSel') .. '%999X × ')
+    add(parts, Hi('TabLineSel') .. '%999X  ×  ')
 
     return join(parts, '')
 enddef
