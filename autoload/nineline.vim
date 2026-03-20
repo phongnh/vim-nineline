@@ -16,6 +16,10 @@ def Indicators(): string
         add(parts, '[C]')
     endif
 
+    if &paste
+        add(parts, '[P]')
+    endif
+
     if &spell
         add(parts, '[' .. toupper(tr(&spelllang, ',', '/')) .. ']')
     endif
