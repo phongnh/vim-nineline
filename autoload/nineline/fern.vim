@@ -1,7 +1,7 @@
 vim9script
 
 export def Status(): string
-    var data = matchlist(expand('%'), '^fern://\(.\+\)/file://\(.\+\)\$')
+    const data = matchlist(expand('%'), '^fern://\(.\+\)/file://\(.\+\)\$')
 
     if empty(data)
         return '[Fern]'

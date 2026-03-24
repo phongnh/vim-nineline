@@ -36,7 +36,7 @@ def BufferIndicators(): string
 
     add(parts, &expandtab ? $'[S:{Shiftwidth()}]' : $'[T:{&tabstop}]')
 
-    var encoding = !empty(&fileencoding) ? &fileencoding : &encoding
+    const encoding = !empty(&fileencoding) ? &fileencoding : &encoding
     if !empty(encoding) && encoding !=# 'utf-8'
         add(parts, $'[{encoding}]')
     endif
@@ -54,7 +54,7 @@ enddef
 # Public autoload function callable as nineline#Statusline()
 # In autoload files, exported functions are automatically available as autoload functions
 export def Statusline(): string
-    var current_winid = get(g:, 'statusline_winid', get(g:, 'actual_curwin', '-1')->str2nr())
+    const current_winid = get(g:, 'statusline_winid', get(g:, 'actual_curwin', '-1')->str2nr())
     if current_winid == win_getid(winnr())
         return $'{Indicators()}%<%f{ZoomState()}%w%m%r %= {BufferIndicators()}%y'
     else

@@ -23,7 +23,7 @@ enddef
 # Get buffer name with caching to improve performance
 def TabBufferName(bufnr: number): string
     # Check cache first - return cached result if buffer hasn't changed
-    var changedtick = getbufvar(bufnr, 'changedtick', -1)
+    const changedtick = getbufvar(bufnr, 'changedtick', -1)
     var cached = get(tabline_cache.bufnames, bufnr, {})
 
     if !empty(cached) && cached.tick == changedtick
@@ -63,28 +63,28 @@ def TabBufferName(bufnr: number): string
 enddef
 
 def TabName(tabnr: number): string
-    var winnr = tabpagewinnr(tabnr)
-    var bufnr = tabpagebuflist(tabnr)[winnr - 1]
-    var hi = (tabnr == tabpagenr() ? Hi('TabLineSel') : Hi('TabLine'))
+    const winnr = tabpagewinnr(tabnr)
+    const bufnr = tabpagebuflist(tabnr)[winnr - 1]
+    const hi = (tabnr == tabpagenr() ? Hi('TabLineSel') : Hi('TabLine'))
     return $'%{tabnr}T{hi}' .. ' ' .. TabNumber(tabnr) .. TabBufferName(bufnr) .. ' '
 enddef
 
 export def Tabline(): string
     # Periodic cache cleanup to prevent memory leaks
-    var now = localtime()
+    const now = localtime()
     if now - tabline_cache.last_cleanup > 60
         tabline_cache.bufnames = {}
         tabline_cache.last_cleanup = now
     endif
 
-    var tab_count = tabpagenr('$')
-    var max_tabs = &columns >= 120 ? (&columns / 35) : 3
+    const tab_count = tabpagenr('$')
+    const max_tabs = &columns >= 120 ? (&columns / 35) : 3
 
     # Build tabline using array + join for better performance
     var parts = [Hi('Title'), ' TABS']
 
     if tab_count > max_tabs
-        add(parts, ' [' .. tab_count .. ']')
+        add(parts, $' [{tab_count}]')
     endif
 
     add(parts, ' %*')
