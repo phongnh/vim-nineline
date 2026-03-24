@@ -16,7 +16,7 @@ def TabNumber(n: number): string
 enddef
 
 def TabBufferType(bufnr: number): string
-    var buftype = getbufvar(bufnr, '&filetype')
+    const buftype = getbufvar(bufnr, '&filetype')
     return !empty(buftype) ? buftype : getbufvar(bufnr, '&buftype')
 enddef
 
@@ -37,7 +37,7 @@ def TabBufferName(bufnr: number): string
     if bufname =~# '^\[preview'
         result = 'Preview'
     else
-        var buftype = TabBufferType(bufnr)
+        const buftype = TabBufferType(bufnr)
 
         if buftype ==# 'nofile' && bufname =~# '\/.'
             bufname = substitute(bufname, '.*\/\ze.', '', '')
@@ -96,8 +96,8 @@ export def Tabline(): string
         endfor
     else
         # Complex case: show windowed tabs around current tab
-        var current_tab = tabpagenr()
-        var current_index = current_tab - 1
+        const current_tab = tabpagenr()
+        const current_index = current_tab - 1
 
         # Calculate visible window bounds
         var start_index: number
