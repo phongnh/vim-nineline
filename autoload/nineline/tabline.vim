@@ -4,15 +4,15 @@ vim9script
 var tabline_cache = {bufnames: {}, last_cleanup: 0}
 
 def Hi(section: string): string
-    return '%#' .. section .. '#'
+    return $'%#{section}#'
 enddef
 
 def TabPlaceholder(tab: number): string
-    return Hi('TabLineFill') .. '%' .. tab .. '  … %*'
+    return Hi('TabLineFill') .. $'%{tab}  … %*'
 enddef
 
 def TabNumber(n: number): string
-    return n .. ': '
+    return $'{n}: '
 enddef
 
 def TabBufferType(bufnr: number): string
@@ -66,7 +66,7 @@ def TabName(tabnr: number): string
     var winnr = tabpagewinnr(tabnr)
     var bufnr = tabpagebuflist(tabnr)[winnr - 1]
     var hi = (tabnr == tabpagenr() ? Hi('TabLineSel') : Hi('TabLine'))
-    return '%' .. tabnr .. 'T' .. hi .. ' ' .. TabNumber(tabnr) .. TabBufferName(bufnr) .. ' '
+    return $'%{tabnr}T{hi}' .. ' ' .. TabNumber(tabnr) .. TabBufferName(bufnr) .. ' '
 enddef
 
 export def Tabline(): string
