@@ -1,3 +1,3 @@
 vim9script
 
-setlocal statusline=%<[Git\ Rebase]%(\ [%{&spell?toupper(tr(&spelllang,',','/')):''}]%)%=%4l:%-3c\ %P
+setlocal statusline=%<[Git\ Rebase]%=%4l:%-3c\ %P%(\ [%{&spell?toupper(tr(&spelllang,',','/')):''}]%)

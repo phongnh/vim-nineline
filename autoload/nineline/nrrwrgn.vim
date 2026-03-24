@@ -1,43 +1,29 @@
 vim9script
 
-const VISUAL_MODE_INDICATORS = {v: ' [C]', V: '', '': ' [B]'}
+const VISUAL_MODE_INDICATORS = {'': '', v: ' [C]', V: '', "\<C-V>": ' [B]'}
 
-def GetName(): string
-    if exists('b:nrrw_instn')
-        return 'NrrwRgn#' .. b:nrrw_instn
+def GetMode(): string
+    var name = exists('b:nrrw_instn') ? 'NrrwRgn#' .. b:nrrw_instn : 'NrrwRgn'
+    var prefix = stridx(bufname('%'), 'NrrwRgn_multi') == 0 ? 'Multi' : ''
+    var visual = ''
+    var status = call('nrrwrgn#NrrwRgnStatus', [])
+    if !empty(status)
+        prefix = status.multi ? 'Multi' : ''
+        visual = VISUAL_MODE_INDICATORS[status.visual]
     endif
-    
-    var bufname = bufname('%')
-    var name = substitute(bufname, '^NrrwRgn_\zs.*\ze_\d\+$', submatch(0), '')
-    return substitute(name, '__', '#', '')
+    return $'[{prefix}{name}]{visual}'
 enddef
 
-def GetVisualIndicator(visual_mode: any): string
-    return get(VISUAL_MODE_INDICATORS, visual_mode ?? 'V', '')
+def GetBufName(): string
+    var status = call('nrrwrgn#NrrwRgnStatus', [])
+    var bufname = !empty(status) && !empty(status.fullname) ? status.fullname : bufname(get(b:, 'orig_buf', '%'))
+    bufname = fnamemodify(bufname, ':~:.')
+    if !empty(status) && !status.multi
+        bufname = bufname .. $' [{status.start[1]}-{status.end[1]}]'
+    endif
+    return bufname
 enddef
 
 export def Status(): string
-    var name = GetName()
-    var buffer = ''
-    
-    if exists('*nrrwrgn#NrrwRgnStatus')
-        var status = nrrwrgn#NrrwRgnStatus()
-        
-        if !empty(status)
-            var prefix = status.multi ? 'Multi' : ''
-            var indicator = GetVisualIndicator(get(status, 'visual', null))
-            name = prefix .. name .. indicator
-            
-            buffer = fnamemodify(status.fullname, ':~:.')
-            if !status.multi
-                buffer ..= $' [{status.start[1]}-{status.end[1]}]'
-            endif
-        endif
-    endif
-    
-    if empty(buffer) && get(b:, 'orig_buf', 0)
-        buffer = bufname(b:orig_buf)
-    endif
-    
-    return empty(buffer) ? $'[{name}]' : $'[{name}] {buffer}'
+    return GetMode() .. ' ' .. GetBufName()
 enddef

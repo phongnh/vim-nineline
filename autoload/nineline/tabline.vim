@@ -3,14 +3,6 @@ vim9script
 # Tabline
 var tabline_cache = {bufnames: {}, last_cleanup: 0}
 
-def ShortenPath(filename: string): string
-    if exists('*pathshorten')
-        return pathshorten(filename, 1)
-    else
-        return substitute(filename, '\v\w\zs.{-}\ze(\\|/)', '', 'g')
-    endif
-enddef
-
 def Hi(section: string): string
     return '%#' .. section .. '#'
 enddef
@@ -55,7 +47,7 @@ def TabBufferName(bufnr: number): string
 
         if strlen(bufname) > 30
             if bufname =~# '^[~/]'
-                bufname = ShortenPath(bufname)
+                bufname = pathshorten(bufname, 1)
             else
                 bufname = fnamemodify(bufname, ':t')
             endif
@@ -110,7 +102,7 @@ export def Tabline(): string
         # Calculate visible window bounds
         var start_index: number
         var end_index: number
-        
+
         if current_tab == 1
             start_index = 0
             end_index = max_tabs - 1
