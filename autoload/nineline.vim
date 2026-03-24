@@ -20,12 +20,12 @@ def Indicators(): string
         add(parts, '[P]')
     endif
 
-    if len(l:parts) > 0
-        add(l:parts, ' ')
+    if len(parts) > 0
+        add(parts, ' ')
     endif
 
-    return join(l:parts, '')
-endfunction
+    return join(parts, '')
+enddef
 
 def BufferIndicators(): string
     var parts: list<string> = []
@@ -54,9 +54,9 @@ enddef
 # Public autoload function callable as nineline#Statusline()
 # In autoload files, exported functions are automatically available as autoload functions
 export def Statusline(): string
-    var current_winid = get(g:, 'statusline_winid', get(g:, 'actual_curwin', -1))->str2nr()
+    var current_winid = get(g:, 'statusline_winid', get(g:, 'actual_curwin', '-1')->str2nr())
     if current_winid == win_getid(winnr())
-        return $'{Indicators()}%<%f{ZoomState()}%w%m%r% = {BufferIndicators()}%y'
+        return $'{Indicators()}%<%f{ZoomState()}%w%m%r %= {BufferIndicators()}%y'
     else
         return '%<%f%m%r'
     endif
