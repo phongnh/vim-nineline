@@ -1,5 +1,7 @@
 vim9script
 
+const spelllang_maps = { 'en_us': 'US', 'en_gb': 'GB' }
+
 # Statusline
 def ZoomState(): string
     return get(g:, 'nineline_zoomstate', 0) ? '[Z]' : ''
@@ -27,11 +29,15 @@ def Indicators(): string
     return join(parts, '')
 enddef
 
+export def Spelllang(): string
+    return &spell ? split(&spelllang, ',')->map((_k, v) => '[' .. get(spelllang_maps, v, toupper(v)) .. ']')->join('/') : ''
+enddef
+
 def BufferIndicators(): string
     var parts: list<string> = []
 
     if &spell
-        add(parts, '[' .. toupper(tr(&spelllang, ',', '/')) .. ']')
+        add(parts, Spelllang())
     endif
 
     add(parts, &expandtab ? $'[S:{Shiftwidth()}]' : $'[T:{&tabstop}]')
