@@ -1,3 +1,3 @@
 vim9script
 
-setlocal statusline=%<[Git]%(\ %{expand('%:t')%)%=%4l:%-3c\ %P
+setlocal statusline=%<[Git]%(\ %{nineline#git#Status()%)%=%4l:%-3c\ %P
